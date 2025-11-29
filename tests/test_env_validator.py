@@ -14,7 +14,8 @@ def run_validator(tmp_env_content: str | None):
         env_path.write_text(tmp_env_content)
 
     # run the script
-    proc = subprocess.run(["python", "scripts/validate_env.py"], cwd=str(repo), capture_output=True, text=True)
+    import sys
+    proc = subprocess.run([sys.executable, "scripts/validate_env.py"], cwd=str(repo), capture_output=True, text=True)
 
     # cleanup
     if env_path.exists():
