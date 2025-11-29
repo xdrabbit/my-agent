@@ -68,6 +68,63 @@ cp .env.local.sample .env.local
 # edit .env.local, then start the app
 ```
 
+Demo: local mock OpenAI manager
+------------------------------
+
+There is a small demo which exercises `OpenAIRealtimeManager` with a safe,
+local mock websocket (no network traffic or real keys required):
+
+```bash
+./scripts/demo_mock_openai.py
+```
+
+Switching to a real OpenAI realtime websocket
+--------------------------------------------
+
+If you want to test against the real OpenAI Realtime endpoint you can replace
+the mock factory used in the demo with a factory that returns a real websocket
+client instance. Keep these safety rules in mind:
+
+- Never print secrets (API keys) to logs or console.
+- Keep `.env.local` in `.gitignore` and never commit it.
+- Use a separate, short-lived API key for testing when possible.
+
+The project's `OpenAIRealtimeManager` accepts a `ws_factory` callable so you
+can write a small factory that returns a `websockets` client or similar. The
+demo includes comments showing where to add a production factory.
+
+Live websocket demo (optional)
+------------------------------
+
+If you want to attempt a brief websocket handshake with the real OpenAI
+Realtime endpoint (only if you understand the network implications and your
+API key is ready in `.env.local`), there is `scripts/demo_openai_live.py`.
+It will only perform a handshake and close — it does not send audio.
+
+Run it carefully from the repository root like:
+
+```bash
+PYTHONPATH=./src python scripts/demo_openai_live.py
+```
+
+Secret scanning before commits
+-----------------------------
+
+We include a lightweight secret scanner `scripts/scan_secrets.py` which is
+invoked by the project's pre-commit hook. The scanner looks for known secret
+patterns (such as `sk-` OpenAI keys) and high-entropy tokens in staged files
+and blocks commits if likely secrets are detected.
+
+You can run the scanner manually against files or the index:
+
+```bash
+# run against a working copy file
+python scripts/scan_secrets.py path/to/file
+
+# or let it scan the staged commit (used by the pre-commit hook)
+python scripts/scan_secrets.py
+```
+
 If you prefer automatic loading of values into your shell, consider using tools
 like `direnv` or your system's service manager. Example using `direnv`:
 
