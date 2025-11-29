@@ -29,13 +29,21 @@ async def main():
 
     factory = make_openai_ws_factory(key)
 
-    print("Attempting websocket handshake to OpenAI realtime endpoint...")
+    # Demonstrate wiring the factory into the OpenAIRealtimeManager. This will
+    # create a manager that uses the real websocket transport for I/O. For the
+    # demo we simply connect and disconnect (no audio streamed).
+    from nyra_realtime.openai_manager import OpenAIRealtimeManager
+
+    mgr = OpenAIRealtimeManager(api_key=key, ws_factory=factory)
+
+    print("Connecting manager to OpenAI realtime endpoint...")
     try:
-        ws = await factory()
-        # if connect succeeded, show a short confirmation then close
-        print("Connected — remote websocket handshake succeeded (no data sent).")
-        await ws.close()
-        print("Closed connection.")
+        await mgr.connect()
+        print("Manager is connected. Performing graceful disconnect...")
+        await mgr.disconnect()
+        print("Disconnected successfully")
+    except Exception as exc:
+        print("Connection failed:", type(exc).__name__, str(exc))
     except Exception as exc:
         print("Connection failed:", type(exc).__name__, str(exc))
 
