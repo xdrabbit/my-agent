@@ -1,0 +1,42 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment files — keep local secrets out of the repo
+.env
+.env.local
+env.*
+
+# Editor directories and files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+
+# pytest cache
+.pytest_cache/
+
+# logs
+*.log
+
+# Optional: persistent runtime data — transcripts/evidence may be stored in data/
+# If you track transcripts explicitly, remove the following rule or adjust to
+# ignore only local test artifacts.
+data/*.json

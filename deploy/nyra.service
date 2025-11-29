@@ -1,0 +1,14 @@
+[Unit]
+Description=Nyra Realtime Telephony (scaffold)
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/nyra
+EnvironmentFile=/opt/nyra/.env
+ExecStart=/opt/nyra/.venv/bin/uvicorn nyra_realtime.main:app --host 0.0.0.0 --port 8080
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
