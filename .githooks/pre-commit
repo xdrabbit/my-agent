@@ -19,6 +19,20 @@ for f in $staged_files; do
   fi
 done
 
+# Prevent accidental DELETION of .env.local in a commit / staged changes
+# If a user accidentally deletes their local secrets file and stages it, block the commit.
+deleted=$(git diff --cached --name-status | awk '$1 == "D" { print $2 }') || true
+if [ -n "$deleted" ]; then
+  for d in $deleted; do
+    bn=$(basename "$d")
+    if [[ "$bn" == ".env.local" ]]; then
+      echo "Error: attempting to delete .env.local in this commit — refusing to proceed."
+      echo "If you meant to permanently remove your local file, do so manually; otherwise restore from a safe copy." 
+      exit 1
+    fi
+  done
+fi
+
 # Run a lightweight secret scanner on staged files
 if command -v ./scripts/scan_secrets.py >/dev/null 2>&1; then
   if ! ./scripts/scan_secrets.py; then
