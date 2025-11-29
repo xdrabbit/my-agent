@@ -5,7 +5,8 @@ import tempfile
 
 
 def run_scan(path: Path):
-    proc = subprocess.run([sys.executable, "scripts/scan_secrets.py", str(path)], cwd=str(path.parents[1]), capture_output=True, text=True)
+    repo = Path(__file__).resolve().parents[1]
+    proc = subprocess.run([sys.executable, "scripts/scan_secrets.py", str(path)], cwd=str(repo), capture_output=True, text=True)
     return proc.returncode, proc.stdout, proc.stderr
 
 
