@@ -19,4 +19,15 @@ for f in $staged_files; do
   fi
 done
 
+# Run a lightweight secret scanner on staged files
+if command -v ./scripts/scan_secrets.py >/dev/null 2>&1; then
+  if ! ./scripts/scan_secrets.py; then
+    echo "Pre-commit secret scanner found possible secrets — aborting commit."
+    exit 1
+  fi
+else
+  # If missing, ignore but warn
+  echo "Warning: secret scanner script not found (./scripts/scan_secrets.py). Skipping secret scan."
+fi
+
 exit 0
