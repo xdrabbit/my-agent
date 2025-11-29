@@ -57,6 +57,25 @@ A GitHub Actions CI workflow (`.github/workflows/ci.yml`) verifies on each push 
 pull request that no environment files are tracked and runs the test suite. This
 acts as a second line of defense in case a secrets file is introduced accidentally.
 
+Environment setup
+-----------------
+
+To get started locally, copy `.env.local.sample` to `.env.local` and fill in your
+secrets (this repo ignores `.env.local` so your keys are never committed):
+
+```bash
+cp .env.local.sample .env.local
+# edit .env.local, then start the app
+```
+
+If you prefer automatic loading of values into your shell, consider using tools
+like `direnv` or your system's service manager. Example using `direnv`:
+
+1. install direnv
+2. create a `.envrc` that contains `dotenv` loading or `export $(cat .env.local)`
+3. `direnv allow`
+
+
 This is a scaffold for an executor agent to implement the full realtime audio flows. See the `src/nyra_realtime` package for module stubs and APIs.
 
 OpenAI Realtime manager
