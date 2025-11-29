@@ -10,6 +10,7 @@ the bottom of the file — do NOT paste your API key into logs or command output
 """
 import asyncio
 import os
+from dotenv import load_dotenv
 from nyra_realtime.openai_manager import OpenAIRealtimeManager
 
 
@@ -45,6 +46,11 @@ async def run_demo():
         # This factory creates and returns a websocket-like object.
         # In production you'd return an actual websocket client instance.
         return ws
+
+    # Load .env.local if present; this keeps secrets out of the repo while making
+    # the demo convenient for local development. load_dotenv does NOT print
+    # values and will not overwrite already-set environment variables.
+    load_dotenv(".env.local", override=False)
 
     mgr = OpenAIRealtimeManager(api_key=os.getenv("OPENAI_API_KEY"), ws_factory=factory)
 
