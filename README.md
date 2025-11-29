@@ -37,6 +37,26 @@ This file is intentionally ignored by git — see the provided `.gitignore` whic
 secret to a public repo, rotate the key immediately and remove the file from the
 repository using `git rm --cached .env.local` and a subsequent commit.
 
+Developer convenience: install git hooks
+---------------------------------------
+
+This repo includes a pre-commit hook template that protects against accidentally
+committing `.env` files into the repository. To enable it locally run:
+
+```bash
+./scripts/install-hooks.sh
+```
+
+This will set git's `core.hooksPath` to `.githooks/` so the pre-commit script is
+run automatically before commits.
+
+Continuous Integration
+----------------------
+
+A GitHub Actions CI workflow (`.github/workflows/ci.yml`) verifies on each push or
+pull request that no environment files are tracked and runs the test suite. This
+acts as a second line of defense in case a secrets file is introduced accidentally.
+
 This is a scaffold for an executor agent to implement the full realtime audio flows. See the `src/nyra_realtime` package for module stubs and APIs.
 
 OpenAI Realtime manager
